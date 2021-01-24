@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href = "{{ url_for('static', filename = 'css/main.css')}}" rel = "stylesheet">
+    <link href = "{{ url_for('static', filename = 'css/nav.css')}}" rel = "stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="#" />
+    <title>Document</title>
+</head>
+<body>
+	<script> 
+		$(document).ready(function(){
+			setInterval(function(){
+     		 $("#here").load(window.location.href + " #here" );
+		}, 1000);
+		});
+	</script>
+	<div id = "here">
+	<ul class="topnav">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('profile') }}">My Profile ({{user}})</a></li>
+        <li><a href="{{ url_for('matches') }}">Matches</a></li>
+        <li><a href="{{ url_for('profileviews') }}">Who Viewed My Profile?</a></li>
+		<li><a href="{{ url_for('profilelikes') }}">Who Liked My Profile?</a></li>
+        <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
+        {% if newMessage == True %}
+        <li><a href="{{ url_for('chats') }}">Chats <span class="badge badge-secondary"> New </span></a></li>
+        {% else %}
+        <li><a href="{{ url_for('chats') }}">Chats</a></li>
+        {% endif %}
+        <li style="cursor: pointer;" class="right"><a href = "{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+    <center><div class="container">
+        <h1>Notifications</h1>
+        {% if not data[0]  %}
+            <h3>No Notifications</h1>
+        {% endif %}
+        {% for thing in data %}
+        {% if thing.status == '0' %}
+        <h4 style="color:#66ff00">{{ thing["Subject"] }}</h4>
+        <h6 style="color:#66ff00">{{ thing["content"]}}</h6>
+        {% elif thing.status == '1' %}
+        <h4 style="color:red">{{ thing["Subject"] }}</h4>
+        <h6 style="color:red">{{ thing["content"]}}</h6>
+        {% endif %}
+        {%endfor%}
+    </div></div></center>

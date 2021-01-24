@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href = "{{ url_for('static', filename = 'css/main.css')}}" rel = "stylesheet">
+    <link href = "{{ url_for('static', filename = 'css/nav.css')}}" rel = "stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<link rel="shortcut icon" href="#" />
+	<title>Preferences</title>
+	<center><div id="logo"><img class = "center" src="{{url_for('static', filename='matcha-logo.png')}}" alt="" width="150" height="auto"></div></center>
+</head>
+​
+<ul class="topnav">
+	<li><a href="">Preferences</a></li>
+	<li style="cursor: pointer;" class="right"><a href = "{{ url_for('logout') }}">Logout</a></li>
+</ul>
+<body>
+<center>
+	{% if error == 1 %}
+		<h3>Please do not select more than 5 images</h3>
+	{% endif %}
+​{% if completed == 1 %}
+	<h3 style="color:brown; font-size: 1vw; font-family: Verdana, Geneva, Tahoma, sans-serif;">You successfully saved your preferences</h3>
+{% endif %}
+<h1>Tell us about yourself!</h1>
+<form action=" {{ url_for('preferences_handler') }}" method = "POST" enctype="multipart/form-data">
+Name: <input name="name" type="text" required> Surname: <input name="surname" type="text" required>
+<p>Gender:</p>
+<input type="radio" name="gender" value="male" checked="checked">Male
+<input type="radio" name="gender" value="female">Female
+<p>Sexual Preference:</p>
+<input type="radio" name="sexual" value="homosexual">Homosexual
+<input type="radio" name="sexual" value="heterosexual">Heterosexual
+<input type="radio" name="sexual" value="bisexual" checked="checked">Bisexual
+<p>Location:</p>
+<input name="location" type="text" required>
+<p>Bio:</p>
+<textarea name="bio" placeholder="Tell us more..." me="message" style="width:250px; height:150px;"></textarea>
+<h2>Interests Tags</h2>
+<h3>#Animals?</h3>
+<input type="radio" name="animals" value="yes">Yes
+<input type="radio" name="animals" checked="checked" value="no">No
+<h3>#Music?</h3>
+<input type="radio" name="music" value="yes">Yes
+<input type="radio" name="music" checked="checked" value="no">No
+<h3>#Movies?</h3>
+<input type="radio" name="movies" value="yes">Yes
+<input type="radio" name="movies" checked="checked" value="no">No
+<h3>#Sports</h3>
+<input type="radio" name="sports" value="yes">Yes
+<input type="radio" name="sports" checked="checked" value="no">No
+<h3>#Food?</h3>
+<input type="radio" name="food" value="yes">Yes
+<input type="radio" name="food" checked="checked" value="no">No
+<br>
+<br>Select images: <input type="file" name="img" multiple required>
+<div class="location">
+	<input type="hidden" name="suburb" value="You Cannot Be Located"><input type="hidden" name="postal" value="0000">
+</div>
+<script>
+	$.ajax({
+		url: "https://ipapi.co/json/",
+		jsonpCallback: "callback",
+		dataType: "json",
+		success: function( location ) {
+			$('.location').html(`<input type="hidden" name="suburb" value="${location.city}, ${location.region}"><input type="hidden" name="postal" value="${location.postal}">`);
+		}
+	});	
+</script>
+<br/><input onclick="locationAlert()" type="submit" name = "pref" value = "Submit"/>
+<script>
+function locationAlert(){
+		navigator.geolocation.getCurrentPosition(function(position){})
+	}
+	</script>
+</form><br/>
+</center>
+</body>
+</html>

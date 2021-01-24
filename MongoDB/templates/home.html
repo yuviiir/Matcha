@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href = "{{ url_for('static', filename = 'css/main.css')}}" rel = "stylesheet">
+    <link href = "{{ url_for('static', filename = 'css/nav.css')}}" rel = "stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="#" />
+    <title>Home</title>
+</head>
+<body>
+	<script> 
+		$(document).ready(function(){
+			setInterval(function(){
+     		 $("#here").load(window.location.href + " #here" );
+		}, 1000);
+		});
+	</script>
+	<div id = "here">
+	<ul class="topnav">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('profile') }}">My Profile ({{user}})</a></li>
+        <li><a href="{{ url_for('matches') }}">Matches</a></li>
+        <li><a href="{{ url_for('profileviews') }}">Who Viewed My Profile?</a></li>
+        <li><a href="{{ url_for('profilelikes') }}">Who Liked My Profile?</a></li>
+        <li><a href="{{ url_for('notifications') }}">Notifications({{num}})</a></li>
+        {% if newMessage == True %}
+        <li><a href="{{ url_for('chats') }}">Chats <span class="badge badge-secondary"> New </span></a></li>
+        {% else %}
+        <li><a href="{{ url_for('chats') }}">Chats</a></li>
+        {% endif %}
+        <li style="cursor: pointer;" class="right"><a href = "{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+    </div>
+    <center>
+        <h1>Home</h1>
+        <form action=" {{ url_for('home') }}" method = "POST" enctype="multipart/form-data">
+            <input type="hidden" name="typeOf" value="search">
+            <h2>Search and Filter</h2>
+			Search By Age Range <input type = "number"  min="18" max="100" value="{{thing.minAgeValue}}" name="searchByAgeMin" placeholder="Min"/> : <input type = "number" value="{{thing.maxAgeValue}}" name="searchByAgeMax"  min="18" max="100" placeholder="Max"/>
+            <br>
+            <br>
+            Search By Location <input type = "text" value="{{thing.suburbValue}}" name="searchByLocation" placeholder="Search By Location" />
+            <br>
+            <br>
+            Search By Popularity Range <input type = "number"  value="{{thing.minPopularityValue}}" name="searchByPopularityMin" placeholder="Min"/> : <input type = "number" value="{{thing.maxPopularityValue}}" name="searchByPopularityMax" placeholder="Max"/>
+            <br>
+            <br>	
+            <input type="checkbox" name="animals" value="yes" {{thing.tagAnimalsCheck}}>
+            <input type="hidden" name="animals" value="no">
+			<label for="animals">Animals</label>
+            <input type="checkbox" name="food" value="yes" {{thing.tagFoodCheck}}>
+            <input type="hidden" name="food" value="no">
+			<label for="food">Food</label>
+            <input type="checkbox" name="sports" value="yes" {{thing.tagSportsCheck}}>
+            <input type="hidden" name="sports" value="no">
+			<label for="sports">Sports</label>
+            <input type="checkbox" name="movies" value="yes" {{thing.tagMoviesCheck}}>
+            <input type="hidden" name="movies" value="no">
+			<label for="movies">Movies</label>
+            <input type="checkbox" name="music" value="yes" {{thing.tagMusicCheck}}>
+            <input type="hidden" name="music" value="no">
+            <label for="music">Music</label>
+            <input type="checkbox" name="any" value="yes" {{thing.tagAnyCheck}}>
+            <input type="hidden" name="any" value="no">
+			<label for="any">Any</label>
+            <br>
+            <br>
+			<button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <form action=" {{ url_for('home') }}" method = "POST" enctype="multipart/form-data">
+            <input type="hidden" name="typeOf" value="sort">
+            <h2>Sort</h2>
+
+            By Age:
+            <input type="radio" name="sort" value="+1Age" checked="checked"><label for="ageAscending">Ascending</label>
+            <input type="radio" name="sort" value="-1Age"><label for="ageDescending">Descending</label><br>
+            
+            Sort By Popularity:
+            <input type="radio" name="sort" value="+1Popularity"><label for="popularityAscending">Lowest</label>
+            <input type="radio" name="sort" value="-1Popularity"><label for="popularityDescending">Highest</label><br>
+            Sort By Interests:
+            <input type="radio" name="sort" value="-1Food"><label for="Food">Food</label>
+            <input type="radio" name="sort" value="-1Animals"><label for="Animals">Animals</label>
+            <input type="radio" name="sort" value="-1Sports"><label for="Sports">Sports</label>
+            <input type="radio" name="sort" value="-1Movies"><label for="Movies">Movies</label>
+            <input type="radio" name="sort" value="-1Music"><label for="Music">Music</label><br>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        {% if nomatches == 1 %}
+        <h1>There is no one new around you!</h1>
+        {% else %}
+        <div class="container">
+        {% for compatibleUser in compatibleUsersArr %}
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+					{% if compatibleUser['Images'][0] %}
+                    <div class="profile-userpic">
+						<img class = "img-responsive" src="../static/profile_pictures/{{ compatibleUser['Images'][0] + '.png'}}" alt="">
+					{% endif %}
+                    </div>
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">
+                            {% if compatibleUser['Name'] and compatibleUser['Surname'] %}
+                            <a href="{{ url_for('viewprofile', username = compatibleUser['username']) }}">
+                            <h4>{{compatibleUser['Name']}}</h4>
+                            <h4>{{compatibleUser['Surname']}}</h4>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="profile-userbuttons">
+                        <a href = "{{ url_for('like', likedUser = compatibleUser['username']) }}" class="fa fa-heart" style="font-size:30px;color:pink;"></a>
+                        <a href = "{{ url_for('dislike', dislikedUser = compatibleUser['username']) }}" class="fa fa-times" style="font-size:30px;color:red;"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class = "profile_container">
+                    <div class="profile-content">
+                        <h3 style="align-content: center;">User Information</h3>
+                        <br>
+						{% if compatibleUser['Age'] %}
+						<h5>Age</h5>
+						<div class="info">
+							{{compatibleUser['Age']}}
+						</div>
+						{% endif %}
+						{% if compatibleUser['Bio'] %}
+						<h5>Bio</h5>
+						<div class="info">
+							{{compatibleUser['Bio']}}
+						</div>
+						{% endif %}
+						{% if compatibleUser['Gender'] %}
+						<h5>Gender</h5>
+						<div class="info">
+							{{compatibleUser['Gender']}}
+						</div>
+						{% endif %}
+						{% if compatibleUser['Sexual Orientation'] %}
+						<h5>Sexual Orientation</h5>
+						<div class="info">
+							{{compatibleUser['Sexual Orientation']}}
+						</div>
+						{% endif %}
+						{% if compatibleUser['Suburb'] %}
+						<h5>Suburb</h5>
+						<div class="info">
+							{{compatibleUser['Suburb']}}
+						</div>
+						{% endif %}
+                        <br>
+                        <a href="{{ url_for('viewprofile', username = compatibleUser['username']) }}"><button class="btn btn-dark">View {{compatibleUser['username']}}'s full profile</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        <br>
+    </center>
+    <br>
+    <br>    
+</body>
+</html>

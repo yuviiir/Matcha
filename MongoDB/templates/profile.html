@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href = "{{ url_for('static', filename = 'css/main.css')}}" rel = "stylesheet">
+    <link href = "{{ url_for('static', filename = 'css/nav.css')}}" rel = "stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="#" />
+    <title>My Profile</title>
+</head>
+<body>
+	<script> 
+		$(document).ready(function(){
+			setInterval(function(){
+     		 $("#here").load(window.location.href + " #here" );
+		}, 1000);
+		});
+	</script>
+	<div id = "here">
+	<ul class="topnav">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('profile') }}">My Profile ({{user}})</a></li>
+        <li><a href="{{ url_for('matches') }}">Matches</a></li>
+        <li><a href="{{ url_for('profileviews') }}">Who Viewed My Profile?</a></li>
+		<li><a href="{{ url_for('profilelikes') }}">Who Liked My Profile?</a></li>
+        <li><a href="{{ url_for('notifications') }}">Notifications({{num}})</a></li>
+        {% if newMessage == True %}
+        <li><a href="{{ url_for('chats') }}">Chats <span class="badge badge-secondary"> New </span></a></li>
+        {% else %}
+        <li><a href="{{ url_for('chats') }}">Chats</a></li>
+        {% endif %}
+        <li style="cursor: pointer;" class="right"><a href = "{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+    </div>
+	<div style="padding:0 16px;">
+	</div>
+	
+    <center><div class="container">
+        <h1>My Profile</h1>
+        <div class="row profile">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+					{% if ImgArr[0] %}
+                    <div class="profile-userpic">
+						<img class = "img-responsive" src="../static/profile_pictures/{{ ImgArr[0] + '.png'}}" alt="">
+					</div>
+					{% endif %}
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">
+                            {% if name and surname %}
+                            <h4>{{name}}</h4>
+                            <h4>{{surname}}</h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="profile-usermenu">
+					{% if noti == "1" %}
+					<a href="/notis">Switch Off Notifications</a>
+					{% endif %}
+					{% if noti == "0" %}
+					<a href="/notis">Switch On Notifications</a>
+                    {% endif %}
+                    <br>
+                    <a href="{{ url_for('editprofile') }}">Edit Profile</a>
+                        <ul class="nav">
+                            <li>
+                                <a href="#">
+                                <i class="glyphicon glyphicon-cutlery"></i>
+                                {% if food == "yes" %}
+                                #Food <i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if food == "no" %}
+                                #Food <i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="#">
+                                <i class="glyphicon glyphicon-music"></i>
+                                {% if music == "yes" %}
+                                #Music <i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if music == "no" %}
+                                #Music <i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="#">
+                                <i class="glyphicon glyphicon-film"></i>
+                                {% if movies == "yes" %}
+                                #Movies <i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if movies == "no" %}
+                                #Movies <i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="#">
+                                <i class="icon ion-ios-paw"></i>
+                                {% if animals == "yes" %}
+                                #Animals <i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if animals == "no" %}
+                                #Animals <i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="#">
+                                <i class="ionicons ion-ios-basketball"></i>
+                                {% if sports == "yes" %}
+                                #Sports <i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if sports == "no" %}
+                                #Sports <i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class = "profile_container">
+                    <div class="profile-content">
+                        <h3 style="align-content: center;">User Information</h3>
+						{% if age %}
+						<h5>Age</h5>
+						<div class="info">
+							{{age}}
+						</div>
+						{% endif %}
+						{% if bio %}
+						<h5>Bio</h5>
+						<div class="info">
+							{{bio}}
+						</div>
+						{% endif %}
+						{% if gender %}
+						<h5>Gender</h5>
+						<div class="info">
+							{{gender}}
+						</div>
+						{% endif %}
+						{% if sexual_orientation %}
+						<h5>Sexual Orientation</h5>
+						<div class="info">
+							{{sexual_orientation}}
+						</div>
+                        {% endif %}
+                        {% if popularity != None %}
+                        <h5>Popularity</h5>
+                        <div class="info">
+                            {{popularity}}
+                        </div>
+						{% endif %}
+						{% if suburb %}
+						<h5>Suburb</h5>
+						<div class="info">
+							{{suburb}}
+						</div>
+						{% endif %}
+						{% if postal_code %}
+                        <h5>Postal Code</h5>
+                        <div class="info">
+							{{postal_code}}
+						</div>
+                        {% endif %}
+                        <br>
+						{% for image in ImgArr[1:]: %}
+							<div class = "picture_container">
+								<img class = "img-responsive" src="../static/profile_pictures/{{ image + '.png' }}" alt="">
+							</div>
+						{% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></center>
+    <br>
+    <br>    
+</body>
+</html>
