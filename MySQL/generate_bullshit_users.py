@@ -1,4 +1,3 @@
-# from pymongo import MongoClient
 from faker import Faker
 import hashlib, os, binascii
 import random
@@ -9,17 +8,6 @@ from setup import cursor
 
 fake = Faker()
 
-# cluster = MongoClient('mongodb+srv://matcha:password13@matcha-g1enx.mongodb.net/test?retryWrites=true&w=majority')
-# db = cluster['Matcha']
-# col = db['Users']
-# noti = db['Notifications']
-# chatsdb = db['Chats']
-
-# cluster = MongoClient('localhost', 27017)
-# db = cluster.matcha
-# col = db.users
-# noti = db.Notifications
-
 def hash_password(password):
 	salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
 	pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
@@ -27,12 +15,8 @@ def hash_password(password):
 	return (salt + pwdhash).decode('ascii')
 
 def createUsers():
-	# col.delete_many( { } )
-	# noti.delete_many( { } )
-	# chatsdb.delete_many( { } )
 	i = 0
 	while (i < 500):
-		# sexual orientation
 		randSO = random.randint(0, 2)
 		if (randSO == 0):
 			SO = 'heterosexual'
@@ -40,9 +24,8 @@ def createUsers():
 			SO = 'homosexual'
 		elif (randSO == 2):
 			SO = 'bisexual'
-		# gender, name, surname
 		randGen = random.randint(0, 1)
-		if (randGen == 0): # male
+		if (randGen == 0):
 			gender = 'male'
 			name = fake.first_name_male()
 			while (len(name) < 5):
@@ -50,7 +33,7 @@ def createUsers():
 			surname = fake.last_name_male()
 			while (len(surname) < 6):
 				surname = fake.last_name_male()
-		elif (randGen == 1): #female
+		elif (randGen == 1):
 			gender = 'female'
 			name = fake.first_name_female()
 			surname = fake.last_name_female()
@@ -199,7 +182,7 @@ def createUsers():
 		"VALUES ("
 		"%s, %s, %s, %s, %s, %s, %s,"
 		"%s, %s, %s, %s, %s, %s,"
-		"%s, %s, %s, %s, %s, %s, %s, %s,"	
+		"%s, %s, %s, %s, %s, %s, %s, %s,"
 		"%s, %s, %s, %s, %s, %s,"
 		"%s, %s, %s, %s)")
 		val = ("1", "1", "", "", "false", "", "",
@@ -210,18 +193,10 @@ def createUsers():
 		cursor.execute(sql, val)
 		db.commit()
 		print(val)
-		# query = {'Pref': '1', 'Verify': '1', 'Matches': '', 'Chats' : '', 'NewMessage': False, 'Likes': '', 'Dislikes': '', 'Name': name, 'Surname': surname, 'Age': age, 'Email': email, 'username': username, 'Password': hash_password('Password123!'),
-		# 		'Gender': gender, 'Popularity': popularity, 'Blocked': '', 'ProfileViews': '', 'ProfileLikes': '', 'Suburb': location, 'Postal Code': random.randint(1000, 2999), 'Sexual Orientation': SO,
-		# 		'Bio': 'I am ' + name , 'Animals': animalsQuery, 'Music': musicQuery, 'Sports': sportsQuery, 'Food': foodQuery, 'Movies': moviesQuery, 'Noti': '1',
-		# 		'Images': 'trtvyoxhwtnwcxw1, vxrscllmrvqimvu2, ggzdavmalijyoun3, temeocunmfgvgtx4, nemgggxqfkphbkh5', 'Token' : '', 'ConnectionStatus' : lastSeen}
-		# col.insert_one(query)
-		# print(query)
 		i += 1
 	sql = ("INSERT INTO users (username, Password, Blocked) VALUES (%s, %s, %s)")
 	val = ("Admin", hash_password("Admin123!"), "")
 	cursor.execute(sql, val)
 	db.commit()
-	# query = {"username": "Admin", "Password": hash_password("Admin123!"), "Blocked": ""}
-	# col.insert_one(query)
 
 createUsers()

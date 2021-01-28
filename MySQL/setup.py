@@ -1,60 +1,24 @@
 import mysql.connector
 from mysql.connector import errorcode
 
-# from generate_bullshit_users import createUsers
-
-config = {
-	'user' : 'root',
-	'password' : 'anything',
-	'host' : 'localhost'
-}
-
 def create_conn():
 	config = {
 	'user' : 'root',
-	'password' : '1234',
+	'password' : 'anything',
 	'host' : 'localhost'
 	}
 	db = mysql.connector.connect(pool_name = "pooly_pool", pool_size = 32, pool_reset_session = True,**config)
-	# cursor = db.cursor()
 	return db
 
 def close_conn(db):
 	db.close()
 	return db
 
-# db = mysql.connector.connect(pool_name = "pooly_pool", pool_size = 32, pool_reset_session = True,**config)
 db = create_conn()
 cursor = db.cursor()
 
 DB_NAME = 'matcha_sql'
 TABLES = {}
-
-# _id : 5ec4f26b32b14a913ceaad87
-# Pref : "1"
-# Verify : "1"
-# Matches : ""
-# Chats : ""
-# NewMessage : false
-# Likes : ""
-# Dislikes : ""
-# Name : "Tyler"
-# Surname : "Stevenson"
-# Age : 77
-# Email : "TylerTryrSeon@hotmail.gov.za"
-# username : "TryrSeon"
-# Password : "3d91ad722b54f75188978d5351bc33aee60b6fe5360ad194c9f346288761d890f8e15d..."
-# Gender : "male"
-# Popularity : 36
-# Blocked : ""
-# ProfileViews : ""
-# ProfileLikes : ""
-# Suburb : "Ruiterhof, Gauteng"
-# Postal Code : 2190
-# Sexual Orientation : "heterosexual"
-# Bio : "I am Tyler"
-# Animals : "no"
-# Music : "no"
 
 TABLES['users'] = (
 	"CREATE TABLE `users` ("
@@ -133,7 +97,6 @@ def create_tables():
 
 create_db()
 create_tables()
-# createUsers()
 
 def add_log():
 	sql = "INSERT INTO users (Name, Surname) VALUES (%s, %s)"
@@ -142,5 +105,3 @@ def add_log():
 	db.commit()
 	log_id = cursor.lastrowid
 	print("Added log {}".format(log_id))
-
-# add_log()
