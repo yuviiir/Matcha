@@ -2,10 +2,10 @@ Matcha
 WeThinkCode_ Module
 Web - Project 2
 
-Description
+Description:
 This project is about creating a dating website.
 
-Objective
+Objective:
 Create an dating web application. A user will then be able to register, connect, fill his/her profile, search and look into the profile of other users, like them and chat with those that “liked” back.
 
 For this project any language is permitted; micro-frameworks and libraries are also permitted. Consider that a “micro-framework” has a router, and eventually templating, but no ORM, validators or User Accounts Manager. PHP, Rust, Mongoose, Angular, C++, etc are forbidden.
